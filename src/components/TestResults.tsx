@@ -9,6 +9,7 @@ interface AnswerResult {
   selectedAnswer: number;
   explanation: string;
   text: string;
+  options: string[];
 }
 
 interface TestResultsProps {
@@ -144,24 +145,24 @@ export default function TestResults({
 
                 {/* Answer Status */}
                 <div className="space-y-2 ml-10">
-                  {item.selectedAnswer !== -1 && item.selectedAnswer !== item.correctAnswer && (
-                    <div className="flex items-center gap-2 text-sm text-red-600">
-                      <span className="font-semibold">Your answer:</span>
-                      <span className="bg-red-50 px-2 py-0.5 rounded">
-                        {optionLetters[item.selectedAnswer]}) (incorrect)
-                      </span>
-                    </div>
-                  )}
                   {item.selectedAnswer === -1 && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <span className="font-semibold">Your answer:</span>
+                    <div className="flex items-start gap-2 text-sm text-gray-500">
+                      <span className="font-semibold shrink-0">Your answer:</span>
                       <span className="bg-gray-100 px-2 py-0.5 rounded">Not answered</span>
                     </div>
                   )}
-                  <div className="flex items-center gap-2 text-sm text-green-700">
-                    <span className="font-semibold">Correct answer:</span>
+                  {item.selectedAnswer !== -1 && item.selectedAnswer !== item.correctAnswer && (
+                    <div className="flex items-start gap-2 text-sm text-red-600">
+                      <span className="font-semibold shrink-0">Your answer:</span>
+                      <span className="bg-red-50 px-2 py-0.5 rounded">
+                        {optionLetters[item.selectedAnswer]}) {item.options?.[item.selectedAnswer]}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex items-start gap-2 text-sm text-green-700">
+                    <span className="font-semibold shrink-0">Correct answer:</span>
                     <span className="bg-green-50 px-2 py-0.5 rounded">
-                      {optionLetters[item.correctAnswer]})
+                      {optionLetters[item.correctAnswer]}) {item.options?.[item.correctAnswer]}
                     </span>
                   </div>
                 </div>

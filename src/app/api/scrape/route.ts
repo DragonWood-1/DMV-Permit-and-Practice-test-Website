@@ -3,6 +3,9 @@ import { validateApiKey, getClientIP } from '@/lib/security';
 import { scrapeAllStates } from '@/lib/scraper';
 import { rateLimit } from '@/lib/rateLimit';
 
+// Allow up to 5 minutes for the scrape job (Vercel Pro/Enterprise)
+export const maxDuration = 300;
+
 export async function POST(request: NextRequest) {
   // Validate API key
   const apiKey = request.headers.get('x-api-key');

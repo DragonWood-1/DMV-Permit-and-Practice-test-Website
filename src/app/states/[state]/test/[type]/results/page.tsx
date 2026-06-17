@@ -19,6 +19,7 @@ interface ResultData {
     selectedAnswer: number;
     explanation: string;
     text: string;
+    options: string[];
   }>;
 }
 

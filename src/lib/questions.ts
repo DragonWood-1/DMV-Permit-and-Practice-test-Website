@@ -1,4 +1,5 @@
 import { questions, Question, getQuestionsForState, shuffleQuestions } from '@/data/questions';
+import { stateBySlug } from '@/data/states';
 
 export interface QuestionForClient {
   id: string;
@@ -16,6 +17,7 @@ export interface AnswerResult {
   selectedAnswer: number;
   explanation: string;
   text: string;
+  options: string[];
 }
 
 export interface TestResult {
@@ -31,11 +33,14 @@ export interface TestResult {
  * Get questions for a state and test type, stripped of answers for client
  */
 export function getQuestionsForTest(
-  stateAbbr: string,
+  stateSlugOrAbbr: string,
   type: 'permit' | 'drivers' | 'motorcycle',
   count: number = 40
 ): QuestionForClient[] {
-  const allQuestions = getQuestionsForState(stateAbbr, type);
+  // Accept either a slug ("california") or abbreviation ("CA") — resolve to abbreviation
+  const state = stateBySlug(stateSlugOrAbbr);
+  const abbr = state ? state.abbreviation : stateSlugOrAbbr.toUpperCase();
+  const allQuestions = getQuestionsForState(abbr, type);
   const shuffled = shuffleQuestions(allQuestions);
   const selected = shuffled.slice(0, Math.min(count, shuffled.length));
 
@@ -74,6 +79,7 @@ export function scoreAnswers(
       selectedAnswer: answer.selectedAnswer,
       explanation: question.explanation,
       text: question.text,
+      options: question.options,
     });
   }
 
