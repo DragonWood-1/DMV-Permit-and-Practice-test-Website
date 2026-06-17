@@ -1,0 +1,9 @@
+{
+  "name": "DMV Practice Tests",
+  "short_name": "DMV Tests",
+  "description": "Free DMV practice tests for all 50 states",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e3a5f",
+  "theme_color": "#1e3a5f"
+}

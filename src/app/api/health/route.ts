@@ -2,16 +2,23 @@ import { NextResponse } from 'next/server';
 import { questions } from '@/data/questions';
 import { states } from '@/data/states';
 
+// Force dynamic rendering — this route checks live DB status, never cache it
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   let dbStatus = 'unknown';
 
-  try {
-    // Try to import and use prisma
-    const { default: prisma } = await import('@/lib/db');
-    await prisma.$queryRaw`SELECT 1`;
-    dbStatus = 'connected';
-  } catch {
-    dbStatus = 'unavailable';
+  // Skip DB check if DATABASE_URL is not configured (e.g. during build)
+  if (process.env.DATABASE_URL) {
+    try {
+      const { default: prisma } = await import('@/lib/db');
+      await prisma.$queryRaw`SELECT 1`;
+      dbStatus = 'connected';
+    } catch {
+      dbStatus = 'unavailable';
+    }
+  } else {
+    dbStatus = 'not_configured';
   }
 
   const health = {
